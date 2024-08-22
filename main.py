@@ -39,7 +39,7 @@ except FileNotFoundError:
 # Initialize R2 client
 try:
     s3 = boto3.client(
-        "s3",
+        service_name='s3',
         endpoint_url=r2_endpoint,
         aws_access_key_id=r2_access_key,
         aws_secret_access_key=r2_secret_key,
