@@ -1,7 +1,6 @@
 import os
 import boto3
 from botocore.exceptions import ClientError
-from dotenv import load_dotenv
 import datetime
 import tarfile
 import logging
@@ -11,14 +10,11 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-# Load environment variables
-load_dotenv()
-
 # R2 credentials and bucket name
-r2_access_key = os.getenv("R2_ACCESS_KEY")
-r2_secret_key = os.getenv("R2_SECRET_KEY")
-r2_endpoint = os.getenv("R2_ENDPOINT")
-bucket_name = os.getenv("R2_BUCKET_NAME")
+r2_access_key = os.environ["R2_ACCESS_KEY"]
+r2_secret_key = os.environ["R2_SECRET_KEY"]
+r2_endpoint = os.environ["R2_ENDPOINT"]
+bucket_name = os.environ["R2_BUCKET_NAME"]
 
 # Folders to backup
 folders_to_backup = [
