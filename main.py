@@ -11,10 +11,10 @@ logging.basicConfig(
 )
 
 # R2 credentials and bucket name
-r2_access_key = os.environ["R2_ACCESS_KEY"]
-r2_secret_key = os.environ["R2_SECRET_KEY"]
-r2_endpoint = os.environ["R2_ENDPOINT"]
-bucket_name = os.environ["R2_BUCKET_NAME"]
+r2_access_key = os.environ.get("R2_ACCESS_KEY")
+r2_secret_key = os.environ.get("R2_SECRET_KEY")
+r2_endpoint = os.environ.get("R2_ENDPOINT")
+bucket_name = os.environ.get("R2_BUCKET_NAME")
 
 # Folders to backup
 folders_to_backup = [
