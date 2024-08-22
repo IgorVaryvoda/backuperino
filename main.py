@@ -57,6 +57,22 @@ def upload_to_r2(file_name, bucket, object_name=None):
     return True
 
 
+def split_file(file_path, chunk_size=3.9 * 1024 * 1024 * 1024):  # 3.9 GB chunks
+    """Split a file into smaller chunks."""
+    base_name = os.path.basename(file_path)
+    with open(file_path, 'rb') as f:
+        chunk = 0
+        while True:
+            chunk_data = f.read(int(chunk_size))
+            if not chunk_data:
+                break
+            chunk_name = f"{base_name}.part{chunk:03d}"
+            with open(chunk_name, 'wb') as chunk_file:
+                chunk_file.write(chunk_data)
+            logging.info(f"Created chunk: {chunk_name}")
+            chunk += 1
+    return chunk
+
 def main():
     # Create a timestamp for the backup
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -65,8 +81,22 @@ def main():
     # Create the tarball
     create_tarball(folders_to_backup, backup_filename)
 
-    # Upload to R2
-    if upload_to_r2(backup_filename, bucket_name):
+    # Split the tarball into chunks
+    num_chunks = split_file(backup_filename)
+
+    # Upload chunks to R2
+    all_uploads_successful = True
+    for i in range(num_chunks):
+        chunk_name = f"{backup_filename}.part{i:03d}"
+        if upload_to_r2(chunk_name, bucket_name):
+            logging.info(f"Chunk {chunk_name} uploaded successfully")
+            os.remove(chunk_name)
+            logging.info(f"Local chunk {chunk_name} removed")
+        else:
+            logging.error(f"Failed to upload chunk {chunk_name}")
+            all_uploads_successful = False
+
+    if all_uploads_successful:
         logging.info("Backup completed successfully")
     else:
         logging.error("Backup failed")
