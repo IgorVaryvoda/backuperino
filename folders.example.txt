@@ -1,0 +1,3 @@
+/etc/nginx
+/home/user
+/var/www/website

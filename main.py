@@ -17,14 +17,10 @@ r2_endpoint = os.environ.get("R2_ENDPOINT")
 bucket_name = os.environ.get("R2_BUCKET_NAME")
 
 # Folders to backup
-folders_to_backup = [
-    "/etc/nginx",
-    "/home/igor/sirv-reporting",
-    "/var/www/supabase",
-    "/var/www/dify",
-    "/var/www/viddl.me",
-    "/var/www/img.viddl.me",
-]
+folders_to_backup = []
+with open('folders.txt', 'r') as file:
+    for line in file:
+        folders_to_backup.append(line.strip())
 
 # Initialize R2 client
 s3 = boto3.client(
