@@ -5,17 +5,19 @@ import datetime
 import tarfile
 import logging
 import sys
+from dotenv import load_dotenv
 
+load_dotenv()
 # Set up logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 # R2 credentials and bucket name
-r2_access_key = os.environ.get("R2_ACCESS_KEY")
-r2_secret_key = os.environ.get("R2_SECRET_KEY")
-r2_endpoint = os.environ.get("R2_ENDPOINT")
-bucket_name = os.environ.get("R2_BUCKET_NAME")
+r2_access_key = os.getenv("R2_ACCESS_KEY")
+r2_secret_key = os.getenv("R2_SECRET_KEY")
+r2_endpoint = os.getenv("R2_ENDPOINT")
+bucket_name = os.getenv("R2_BUCKET_NAME")
 
 # Check for required environment variables
 required_env_vars = ["R2_ACCESS_KEY", "R2_SECRET_KEY", "R2_ENDPOINT", "R2_BUCKET_NAME"]
